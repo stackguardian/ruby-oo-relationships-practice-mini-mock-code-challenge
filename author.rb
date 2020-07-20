@@ -2,7 +2,6 @@ class Author
 attr_accessor :name
 
 @@all = []
-@@books = []
 
     def initialize(name)
         @name = name
@@ -13,21 +12,28 @@ attr_accessor :name
         @@all
     end
 
-
-    def add_book(book)
-    @@books << book
-    end
-
-    def books   
-        @@books 
+    def books
+        Book.all.select {|books| books.author == self}
     end
 
     def write_book(title, word_count)
-        book = Book.new(title)
-        book.author = self
+        Book.new(self, title, word_count)
     end
 
-
+    def total_words
+        all_the_words = 0
+        self.books.each do |book|
+            all_the_words += book.word_count
+    end
+    all_the_words
 end
 
+def self.most_words
+
+    self.all.max_by do |author|
+    author.total_words
+    end
+end
+
+end
 
